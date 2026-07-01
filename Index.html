@@ -1984,7 +1984,7 @@ function CharCreator({onSave,onCancel}){
   const ICONS=["🧑","👨","👩","🧔","👴","👵","🕵️","🧙","⚔️","🔫","📷","🩺","✈️","🎖️","🔍","🏔️","📚","⚗️","🎭","🌊"];
 
   return(
-    React.createElement('div', { style: {minHeight:"100vh",background:CTHULHU_BG,backgroundSize:"600px 200px, 300px 300px, 100% 100%, 100% 100%, 100% 100%, 100% 100%",backgroundRepeat:"repeat-x, repeat, no-repeat, no-repeat, no-repeat, no-repeat",fontFamily:"'Georgia',serif",color:CTHULHU_TEXT,display:"flex",flexDirection:"column"},}
+    React.createElement('div', { style: {minHeight:"100vh",background:CTHULHU_BG,backgroundSize:"600px 200px, 300px 300px, 100% 100%, 100% 100%, 100% 100%, 100% 100%",backgroundRepeat:"repeat-x, repeat, no-repeat, no-repeat, no-repeat, no-repeat",fontFamily:"'Georgia',serif",color:CTHULHU_TEXT,display:"flex",flexDirection:"column",transformOrigin:"top left",transform:`scale(${uiScale})`,width:`${100/uiScale}%`,height:`${100/uiScale}vh`},}
       /* Header */
       , React.createElement('div', { style: {background:CTHULHU_PANEL,borderBottom:`1px solid ${CTHULHU_BORDER}`,padding:"11px 16px",display:"flex",alignItems:"center",gap:12},}
         , React.createElement('span', { style: {fontSize:22},}, "📋")
@@ -4201,6 +4201,7 @@ function LibraryPanel({scenario}){
 }
 
 function MJView({onQuit}){
+  const[uiScale,setUiScale]=useState(1);
   const{gs,moveToken,setScenario,setStep,updateChar,setCharImage,addEnemy,updateEnemy,removeEnemy,clearEnemies,addDiceRoll,clearDiceLog,uploadMap,setActiveMap,removeMap,addMapPin,removeMapPin,setZoom,toggleActiveChar,addCharacter,updateBestiaire,setCharEtats,setEnemyEtats}=useGame();
   const[rightPanel,setRightPanel]=useState("step");
   const[diceModal,setDiceModal]=useState(null);
@@ -4269,7 +4270,14 @@ function MJView({onQuit}){
               , c.imageUrl?React.createElement('img', { src: c.imageUrl, alt: "", style: {width:"130%",height:"130%",objectFit:"cover",objectPosition:"top center",marginTop:"-8%"},}):c.icon
             )
           ))
-          , React.createElement('button', { onClick: onQuit, style: {background:CTHULHU_SURFACE,border:`1px solid ${CTHULHU_BORDER}`,color:CTHULHU_MUTED,borderRadius:6,padding:"4px 9px",cursor:"pointer",fontSize:10,fontFamily:"inherit",marginLeft:4},}, "← Quitter" )
+          , React.createElement('div', { style: {display:"flex",alignItems:"center",gap:5,marginLeft:4,background:CTHULHU_SURFACE,borderRadius:6,padding:"3px 8px",border:`1px solid ${CTHULHU_BORDER}`},}
+          , React.createElement('span', { style: {color:CTHULHU_FAINT,fontSize:9},}, "🔎")
+          , React.createElement('input', { type:"range", min:0.5, max:1, step:0.05, value:uiScale,
+              onChange: e=>setUiScale(parseFloat(e.target.value)),
+              style:{width:70,accentColor:"#2a9d8a",cursor:"pointer"},})
+          , React.createElement('span', { style: {color:CTHULHU_FAINT,fontSize:9,width:26,textAlign:"right"},}, Math.round(uiScale*100), "%")
+        )
+        , React.createElement('button', { onClick: onQuit, style: {background:CTHULHU_SURFACE,border:`1px solid ${CTHULHU_BORDER}`,color:CTHULHU_MUTED,borderRadius:6,padding:"4px 9px",cursor:"pointer",fontSize:10,fontFamily:"inherit",marginLeft:4},}, "← Quitter" )
         )
       )
       /* Scenario sub-header */
@@ -4780,7 +4788,7 @@ function PlayerView({charId,onBack}){
   };
 
   return(
-    React.createElement('div', { style: {minHeight:"100vh",background:CTHULHU_BG,backgroundSize:"600px 200px, 300px 300px, 100% 100%, 100% 100%, 100% 100%, 100% 100%",backgroundRepeat:"repeat-x, repeat, no-repeat, no-repeat, no-repeat, no-repeat",fontFamily:"'Georgia',serif",color:CTHULHU_TEXT,display:"flex",flexDirection:"column"},}
+    React.createElement('div', { style: {minHeight:"100vh",background:CTHULHU_BG,backgroundSize:"600px 200px, 300px 300px, 100% 100%, 100% 100%, 100% 100%, 100% 100%",backgroundRepeat:"repeat-x, repeat, no-repeat, no-repeat, no-repeat, no-repeat",fontFamily:"'Georgia',serif",color:CTHULHU_TEXT,display:"flex",flexDirection:"column",transformOrigin:"top left",transform:`scale(${uiScale})`,width:`${100/uiScale}%`,height:`${100/uiScale}vh`},}
       /* Header */
       , React.createElement('div', { style: {background:CTHULHU_MID,borderBottom:`2px solid ${char.color}55`,padding:"8px 14px",display:"flex",alignItems:"center",gap:10},}
         , React.createElement('div', { onClick: ()=>setShowCropPlayer(true), style: {width:44,height:44,borderRadius:char.imageUrl?"18%":"50%",background:char.imageUrl?"#000":char.color,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,cursor:"pointer",overflow:"hidden",flexShrink:0,border:`2px solid ${char.color}88`,boxShadow:`0 0 10px ${char.color}55`,position:"relative"}, title: "Cliquer pour changer l'avatar"   ,}
@@ -4803,7 +4811,14 @@ function PlayerView({charId,onBack}){
         )
         , React.createElement('div', { style: {display:"flex",gap:5},}
           , React.createElement('button', { onClick: ()=>setShowStatsModal(true), style: {background:`${char.color}22`,border:`1px solid ${char.color}55`,color:char.color,borderRadius:6,padding:"5px 9px",cursor:"pointer",fontSize:10,fontFamily:"inherit",fontWeight:700},}, "⚡ Stats" )
-          , React.createElement('button', { onClick: onBack, style: {background:CTHULHU_SURFACE,border:`1px solid ${CTHULHU_BORDER}`,color:CTHULHU_MUTED,borderRadius:6,padding:"5px 9px",cursor:"pointer",fontSize:10,fontFamily:"inherit"},}, "← Quitter" )
+          , React.createElement('div', { style: {display:"flex",alignItems:"center",gap:5,background:CTHULHU_SURFACE,borderRadius:6,padding:"3px 8px",border:`1px solid ${CTHULHU_BORDER}`},}
+          , React.createElement('span', { style: {color:CTHULHU_FAINT,fontSize:9},}, "🔎")
+          , React.createElement('input', { type:"range", min:0.5, max:1, step:0.05, value:uiScale,
+              onChange: e=>setUiScale(parseFloat(e.target.value)),
+              style:{width:70,accentColor:char.color,cursor:"pointer"},})
+          , React.createElement('span', { style: {color:CTHULHU_FAINT,fontSize:9,width:26,textAlign:"right"},}, Math.round(uiScale*100), "%")
+        )
+        , React.createElement('button', { onClick: onBack, style: {background:CTHULHU_SURFACE,border:`1px solid ${CTHULHU_BORDER}`,color:CTHULHU_MUTED,borderRadius:6,padding:"5px 9px",cursor:"pointer",fontSize:10,fontFamily:"inherit"},}, "← Quitter" )
         )
       )
       /* Tabs */
